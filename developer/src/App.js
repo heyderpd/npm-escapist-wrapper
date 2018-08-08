@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import EscapistWrapper from '../../src';
+import EscapistWrapper from './escapist-wrapper';
 
 class App extends Component {
   render() {

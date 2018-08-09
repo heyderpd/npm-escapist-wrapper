@@ -4,8 +4,8 @@ let callBack = x => x
 
 const getMousePosition = evt => {
   try {
-    const { pageX, pageY } = evt
-    callBack(pageX, pageY)
+    const { pageX: mouseX, pageY: mouseY } = evt
+    callBack({ mouseX, mouseY })
   } catch (error) {}
 }
 

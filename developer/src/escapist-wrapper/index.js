@@ -8,12 +8,20 @@ import { getNewPosition } from './wrapper-position'
 const { abs, min } = Math
 const maxDiff = 100
 
+const Move = styled.div`
+  height: 100px;
+  width: 300px;
+`
+
 const Wrapper = styled.div`
   position: initial;
   height: 50px;
   width: 50px;
   background-color: blue;
   border: 2px solid palevioletred;
+  ${ prop => `position: ${(prop.s.moved ? 'absolute' : 'initial')}` }
+  ${ prop => `top: ${prop.s.y}px;` }
+  ${ prop => `left: ${prop.s.x}px;` }
 `
 
 class EscapistWrapper extends Component {
@@ -21,6 +29,7 @@ class EscapistWrapper extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      moved: false,
       x: 0,
       y: 0,
     }
@@ -42,12 +51,12 @@ class EscapistWrapper extends Component {
 
   reactToMousePosition(mousePosition) {
     const { x, y } = getNewPosition(this.element, mousePosition)
-    this.setState({ x, y })
+    this.setState({ moved: true, x, y })
   }
 
   render () {
     return (
-      <Wrapper>
+      <Wrapper s={this.state} >
         {JSON.stringify(this.state)}
       </Wrapper>
     )

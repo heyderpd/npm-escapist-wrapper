@@ -1,45 +1,54 @@
 const { abs, min, max } = Math
-const maxDistance = 100
+const maxDistance = 150
 
 const getElementPosition = element => {
   const { offsetHeight, offsetWidth, offsetLeft, offsetTop } = element
   const center = {
-    wrapperX: offsetLeft + offsetWidth / 2,
-    wrapperY: offsetTop + offsetHeight / 2,
+    x: offsetLeft + offsetWidth / 2,
+    y: offsetTop + offsetHeight / 2,
   }
-  const startPoint = {
-    start: offsetLeft,
-    end: offsetTop,
+  const start = {
+    x: offsetLeft,
+    y: offsetTop,
   }
-  const endPoint = {
-    start: offsetLeft + offsetWidth,
-    end: offsetTop + offsetHeight,
+  const end = {
+    x: offsetLeft + offsetWidth,
+    y: offsetTop + offsetHeight,
   }
   return {
     center,
-    startPoint,
-    endPoint,
+    start,
+    end,
   }
 }
 
-const getDistance = ({ wrapperX, wrapperY }, { mouseX, mouseY }) => {
-  const moveToLeft = wrapperX <= mouseX ? -1 : 1
-  const moveToTop = wrapperY <= mouseY ? -1 : 1
-  const diffX = min(maxDistance, abs(wrapperX - mouseX))
-  const diffY = min(maxDistance, abs(wrapperY - mouseY))
-  return { moveToLeft, moveToTop, diffX, diffY }
-}
-
-const getMove = (center, mousePosition) => {
-  const { moveToLeft, moveToTop, diffX, diffY } = getDistance(center, mousePosition)
+const getDistance = ({ x, y }, { mouseX, mouseY }) => {
+  const moveToLeft = x <= mouseX ? -1 : 1
+  const moveToTop = y <= mouseY ? -1 : 1
+  const diffX = min(maxDistance, abs(x - mouseX))
+  const diffY = min(maxDistance, abs(y - mouseY))
   return {
-    x: moveToLeft * max(0, maxDistance - diffX),
-    y: moveToTop * max(0, maxDistance - diffY),
+    moveX: moveToLeft * max(0, maxDistance - diffX),
+    moveY: moveToTop * max(0, maxDistance - diffY),
+    distance: (diffX + diffY) / maxDistance
   }
 }
 
-export const getNewPosition = (element, mousePosition, mouseX, mouseY) => {
-  const { center } = getElementPosition(element)
-  const { x, y } = getMove(center, mousePosition)
+const getMove = ({ x, y }, { moveX, moveY, distance }) => {
+  console.log(distance, distance >= maxDistance)
+  if (distance < 1) {
+    return {
+      x: x + moveX / 100,
+      y: y + moveY / 100,
+    }
+  } else {
+    return { x, y }
+  }
+}
+
+export const getNewPosition = (element, mousePosition) => {
+  const elm = getElementPosition(element)
+  const distance = getDistance(elm.center, mousePosition)
+  const { x, y } = getMove(elm.start, distance)
   return { x, y }
 }

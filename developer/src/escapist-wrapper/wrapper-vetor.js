@@ -1,7 +1,7 @@
 const { abs, min, max } = Math
 const maxDistance = 150
 
-const getElementPosition = element => {
+export const getElementPosition = element => {
   const { offsetHeight, offsetWidth, offsetLeft, offsetTop } = element
   const center = {
     x: offsetLeft + offsetWidth / 2,
@@ -34,21 +34,19 @@ const getDistance = ({ x, y }, { mouseX, mouseY }) => {
   }
 }
 
-const getMove = ({ x, y }, { moveX, moveY, distance }) => {
-  console.log(distance, distance >= maxDistance)
+const getVetor = ({ x, y }, { moveX, moveY, distance }) => {
   if (distance < 1) {
     return {
-      x: x + moveX / 100,
-      y: y + moveY / 100,
+      x: x + moveX,
+      y: y + moveY,
     }
   } else {
     return { x, y }
   }
 }
 
-export const getNewPosition = (element, mousePosition) => {
-  const elm = getElementPosition(element)
-  const distance = getDistance(elm.center, mousePosition)
-  const { x, y } = getMove(elm.start, distance)
+export const getFinalPosition = ({ center, start }, mousePosition) => {
+  const distance = getDistance(center, mousePosition)
+  const { x, y } = getVetor(start, distance)
   return { x, y }
 }

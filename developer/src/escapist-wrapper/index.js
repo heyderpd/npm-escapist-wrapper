@@ -3,7 +3,7 @@ import { findDOMNode } from 'react-dom'
 import styled from 'styled-components'
 
 import { startTracker, stopTracker } from './mouse-tracker'
-import { getNewPosition } from './wrapper-position'
+import { doMove } from './wrapper-move'
 
 const { abs, min } = Math
 const maxDiff = 100
@@ -50,8 +50,8 @@ class EscapistWrapper extends Component {
   }
 
   reactToMousePosition(mousePosition) {
-    const { x, y } = getNewPosition(this.element, mousePosition)
-    this.setState({ moved: true, x, y })
+    const setPostion = ({ x, y }) => this.setState({ moved: true, x, y })
+    doMove(this.element, mousePosition, setPostion)
   }
 
   render () {
